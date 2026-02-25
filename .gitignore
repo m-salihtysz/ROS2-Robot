@@ -1,4 +1,4 @@
-# Colcon build outputs
+# Colcon build outputs (ROS 2)
 build/
 install/
 log/
@@ -27,3 +27,4 @@ Thumbs.db
 # ROS 2
 *.bag
 *.db3
+*.pcd
