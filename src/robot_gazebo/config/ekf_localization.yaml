@@ -1,0 +1,51 @@
+ekf_filter_node:
+  ros__parameters:
+    use_sim_time: true
+    frequency: 30.0
+    two_d_mode: true
+
+    map_frame: map
+    odom_frame: odom
+    base_link_frame: base_link
+    world_frame: odom
+
+    # Sensör girişleri
+    # 1) Diferansiyel sürüşten gelen /odom (Gazebo diff_drive plugin'i)
+    odom0: /odom
+    odom0_config: [true,  true,  false,
+                   false, false, true,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false]
+    odom0_differential: false
+
+    # 2) IMU (sahte veri: fake_sensors node'undan /imu/data)
+    imu0: /imu/data
+    imu0_config: [false, false, false,
+                  false, false, true,
+                  false, false, false,
+                  false, false, false,
+                  false, false, false]
+    imu0_differential: false
+
+    # 3) GPS odometry (navsat_transform_node çıktısı; sahte /gps/fix ile beslenir)
+    odom1: /odometry/gps
+    odom1_config: [true,  true,  false,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false]
+    odom1_differential: false
+
+# NavSat: GPS fix + IMU -> /odometry/gps (EKF'nin odom1 girişi)
+navsat_transform_node:
+  ros__parameters:
+    use_sim_time: true
+    frequency: 10.0
+    delay: 3.0
+    magnetic_declination_radians: 0.0
+    yaw_offset: 0.0
+    zero_altitude: true
+    publish_filtered_gps: false
+    use_odometry_yaw: true
+    wait_for_datum: false
